@@ -22,14 +22,14 @@ def raise_ovpn_exceptions(stdout, stderr, log):
         Log content:\n {" ".join(log)},
         stdout content:\n {stdout}
         """
-    elif stdout != "":
-        if "Error opening configuration file:" in stdout:
-            raise RuntimeError("Problem with configuration file:")
-        base_error_message = f"stdout content: {stdout}"
-    else: # unanticipated stderr cases
+    elif stdout == "":  # unanticipated stderr cases
         base_error_message = f"""
             stderr content:\n {stderr}
             """
+    else:
+        if "Error opening configuration file:" in stdout:
+            raise RuntimeError("Problem with configuration file:")
+        base_error_message = f"stdout content: {stdout}"
     
     if base_error_message is not None:
         raise RuntimeError(base_error_message)
